@@ -93,7 +93,7 @@ workspace/
     ├── Multi
 ```
 
-# Video Feature Extraction
+# Video Model Inference
 ## 1. Download slowfast bencmark
 - Download [Here](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md)
 - It is better to download slowfast bencmark 'SLOWFAST_8x8_R50.pkl'
@@ -103,75 +103,32 @@ workspace/
   cd Video/slowfast_feature_extractor
   cd config
   ```
-- You should check input, output path
+- You should check input, output path and set that to video dataset input and output path and checkpoint path
 
-# Inference
-**CHECKPOINT**: The checkpoints of X3D, MVitV2 and ActionFormer from our training process can be found [here]()
-### Step 1: Feature extraction
-1. Feature extraction:
-```bash
-# For X3D model:
-cd /PySlowFast-X3D
-python tools/extract_feature.py --cfg configs/AICity2023/X3D-L_extract_feature.yaml
-
-# For MViTv2 model:
-cd /PySlowFast-X3D
-python tools/extract_feature.py --cfg configs/AICity2023/MViTv2_extract_feature.yaml
+## 3. Do feature Extractor
+- To extract feature, execute the run_net.py as follow:
+```
+python run_net.py --cfg ./configs/<config_file>.yaml
 ```
 
-**Note**: Please modify the variables in the file config .yaml as follows:
-- DATA.PATH_TO_DATA_DIR: path to dataset input, e.g., /data/SetB.
-- DATA.PATH_EXTRACT: path to feature output, e.g., /data/featureB.
-- WEIGHT: path to checkpoints' model.
+## 4. Set feature dataset
 
-2. Concatenate views/models (optional):
-```bash
-cd /data_processing/concat_view_features.py --feature_dir /path/to/feature \
-                                            --output_dir /path/to/feature_output
+- dataset python file is in ```workspace/Video/video_preprocessing.py```
+- You can make dataset npy file to ```./Video/data/X_train.npy``` and ```./Video/data/Y_train.npy```
 
-cd /data_processing/concat_model_features.py --feature_dir_mvit /path/to/feature_mvit \
-                                            --feature_dir_x3d /path/to/feature_x3d \
-                                            --output_dir /path/to/feature_output
-```
-### Step 2: Action localization
-1. Create data json format
-```bash
-cd /data_processing
-python create_data_json_action_former_without_gt.py --dataset_dir /path/to/SetB \
-                                                    --feature_dir /path/to/feature_B \
-                                                    --output_dir /path/to/json_format
-```
+## 5. Do inference and check result
 
-2. Action localization
-```bash
-cd /action_localization
-python ./inference_all.py ./config/AIC_2023_X3D_MViTv2.yaml \
-                            /path/to/checkpoint \
-                            --num_folds 5 \
-                            --output_dir /path/to/raw_prediction
-```
-**Note**: Please modify the variables in the file config .yaml as follows:
-- dataset.json_file: path to data json
-- dataset.input_dim: the clip feature dimension
 
-3. Create submission
-```bash
-cd /data_processing
-python convert_to_submission.py --dataset_path /path/to/SetB \
-                                --prediction_path /path/to/raw_prediction
-```
+# Audio model inference
+
 # Results
 
 # Citation
-If you find our work useful, please use the following BibTeX entry for citation.
+You can citate my paper in "[한국중소기업학회](http://kasbs.or.kr/index.asp)"
 
 # Acknowledgement
-Codebases: [PySlowFast](https://github.com/facebookresearch/SlowFast) and [ActionFormer](https://github.com/happyharrycn/actionformer_release)
+Codebases: [PySlowFast](https://github.com/facebookresearch/SlowFast) and [slowfast feature extractor](https://github.com/tridivb/slowfast_feature_extractor/tree/master)
 
 
 # Contact
-Huy Duong Le (duonglh9@viettel.com.vn / huyduong7101@gmail.com)
-
-Manh Tung Tran (tungtm6@viettel.com.vn)
-
-Minh Quan Vu (quanvm4@viettel.com.vn)
+Jong Gu Kim (kim27y@naver.com)

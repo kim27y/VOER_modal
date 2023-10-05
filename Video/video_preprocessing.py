@@ -45,18 +45,18 @@ def switch(emotion):
  
 
 
-dir_list = os.listdir('./data/features2/')
+dir_list = os.listdir('./data/features/')
 
 data = []
 label = []
 for i in dir_list:
-  filename = os.listdir('./data/features2/' + i)
+  filename = os.listdir('./data/features/' + i)
   for f in filename:
     # Remove wav extension
     id = f[:-4].split('_')[0].split('-')
     if(id[2] != '01'):
       # Dividing according to emotions
-      data.append(np.load(os.path.join('./data/features2/' + i, f)))
+      data.append(np.load(os.path.join('./data/features/' + i, f)))
       label.append(switch(int(id[2])))
 
 
@@ -66,8 +66,8 @@ y_train = np.array(label)
 lb = LabelEncoder()
 y_train = np_utils.to_categorical(lb.fit_transform(y_train))
 
-np.save('./data/X_train2.npy', X_train)
-np.save('./data/y_train2.npy', y_train)
+np.save('./data/X_train.npy', X_train)
+np.save('./data/y_train.npy', y_train)
 
 print(y_train)
 print(X_train.shape)
